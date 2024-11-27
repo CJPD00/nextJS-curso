@@ -18,7 +18,12 @@ const Navbar = async () => {
               <Link href="/startup/create" className="font-bold">
                 <span>Create</span>
               </Link>
-              <button onClick={signOut}>
+              <button
+                onClick={async () => {
+                  "use server";
+                  await signOut();
+                }}
+              >
                 <span>Logout</span>
               </button>
               <Link href={`/user/${session?.id}`}>
@@ -26,14 +31,14 @@ const Navbar = async () => {
               </Link>
             </>
           ) : (
-            <button
-              onClick={async () => {
+            <form
+              action={async () => {
                 "use server";
                 await signIn("github");
               }}
             >
-              <span>Login</span>
-            </button>
+              <button type="submit">Login</button>
+            </form>
           )}
         </div>
       </nav>
