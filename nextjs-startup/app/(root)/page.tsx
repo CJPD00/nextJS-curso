@@ -1,6 +1,10 @@
 import StartupCard from "@/components/StartupCard";
 import SearhForm from "../../components/SearhForm";
+//import { client } from "@/sanity/lib/client";
+import { STARTUPS_QUERY } from "@/sanity/lib/queries";
 //import robot from "@/public/robot.png";
+import { StartupTypeCard } from "@/components/StartupCard";
+import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 export default async function Home({
   searchParams,
 }: {
@@ -8,18 +12,8 @@ export default async function Home({
 }) {
   const query = (await searchParams).query;
 
-  const posts = [
-    {
-      _createdAt: new Date(),
-      views: 55,
-      author: { _id: 1, name: "carlos" },
-      _id: 1,
-      description: "This is a description",
-      image: "/png/robot.png",
-      category: "robots",
-      title: "we Robots",
-    },
-  ];
+  //const posts = await client.fetch(STARTUPS_QUERY);
+  const { data: posts } = await sanityFetch({ query: STARTUPS_QUERY });
 
   return (
     <>
@@ -39,7 +33,7 @@ export default async function Home({
         </p>
         <ul className="card_grid mt-7">
           {posts?.length > 0 ? (
-            posts.map((post: StartupCardType) => (
+            posts.map((post: StartupTypeCard) => (
               <StartupCard key={post._id} post={post}></StartupCard>
             ))
           ) : (
@@ -47,6 +41,7 @@ export default async function Home({
           )}
         </ul>
       </section>
+      <SanityLive></SanityLive>
     </>
   );
 }
